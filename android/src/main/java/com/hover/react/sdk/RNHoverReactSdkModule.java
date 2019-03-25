@@ -14,29 +14,31 @@ import com.hover.sdk.api.Hover;
 import com.hover.sdk.permissions.PermissionActivity;
 
 public class RNHoverReactSdkModule extends ReactContextBaseJavaModule {
-  private final String TAG = "RNHoverReactSdkModule";
+	private final String TAG = "RNHoverReactSdkModule";
 
-  private final ReactApplicationContext reactContext;
+	private final ReactApplicationContext reactContext;
 
-  public RNHoverReactSdkModule(ReactApplicationContext reactContext) {
-    super(reactContext);
-    this.reactContext = reactContext;
-  }
+	public RNHoverReactSdkModule(ReactApplicationContext reactContext) {
+		super(reactContext);
+		this.reactContext = reactContext;
+	}
 
-  @Override
-  public String getName() {
-    return "RNHoverReactSdk";
-  }
+	@Override
+	public String getName() {
+		return "RNHoverReactSdk";
+	}
 
-  @ReactMethod
-  public static void initializeHover(Context c) {
-    Hover.initialize(c);
-  }
+	@ReactMethod
+	public static void initializeHover(Context c) {
+		Hover.initialize(c);
+	}
 
-  @ReactMethod
-  public void getPermission() {
-    Log.d(TAG, "getting permissions");
+	@ReactMethod
+	public void getPermission() {
+		Log.d(TAG, "getting permissions");
+		Intent i = new Intent(reactContext, PermissionActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //    UiThreadUtil.runOnUiThread(new Runnable() {
-    reactContext.startActivity(new Intent(reactContext, PermissionActivity.class));
-  }
+		reactContext.startActivity(i);
+	}
 }
