@@ -1,6 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.hover.react.sdk">
-	<uses-permission android:name="android.permission.INTERNET"/>
+	package="com.hover.react.sdk">
+
+	<uses-permission android:name="android.permission.INTERNET" />
+
+	<application>
+		<service android:name=".RNTransactionUpdateService" />
+		<receiver
+			android:name=".RNHoverTransactionReceiver"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="com.hover.react.tester.CONFIRMED_TRANSACTION"/>
+			</intent-filter>
+		</receiver>
+	</application>
 
 </manifest>
-  
