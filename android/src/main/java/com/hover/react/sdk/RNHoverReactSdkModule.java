@@ -2,11 +2,14 @@ package com.hover.react.sdk;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,6 +24,8 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.hover.sdk.api.Hover;
 import com.hover.sdk.api.HoverParameters;
 import com.hover.sdk.permissions.PermissionActivity;
+
+import java.util.List;
 
 import io.sentry.Sentry;
 
@@ -103,6 +108,13 @@ public class RNHoverReactSdkModule extends ReactContextBaseJavaModule {
 				sessionPromise = null;
 			}
 		}
+	}
+
+	// Just for testing
+	private void fakeSMSUpdate() {
+		Intent i = new Intent(getPackageName() + ".CONFIRMED_TRANSACTION");
+		reactContext.sendBroadcast(i);
+//		LocalBroadcastManager.getInstance(reactContext).sendBroadcast(i);
 	}
 
 	private void startHover(Activity currentActivity, String actionId) {
