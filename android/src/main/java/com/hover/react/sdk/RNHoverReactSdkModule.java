@@ -19,6 +19,9 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.hover.sdk.api.Hover;
@@ -26,6 +29,7 @@ import com.hover.sdk.api.HoverParameters;
 import com.hover.sdk.permissions.PermissionActivity;
 
 import java.util.List;
+import java.util.Map;
 
 import io.sentry.Sentry;
 
@@ -97,13 +101,17 @@ public class RNHoverReactSdkModule extends ReactContextBaseJavaModule {
 	}
 
 	@ReactMethod
-	public void makeRequest(String actionId, Promise p) {
+	public void makeRequest(String actionId, ReadableMap extras, Promise p) {
+		makeRequest(actionId, extras, 0, p);
+	}
+	@ReactMethod
+	public void makeRequest(String actionId, ReadableMap extras, int environment, Promise p) {
 		Activity currentActivity = getCurrent(p);
 		if (currentActivity != null) {
 			try {
 				sessionPromise = p;
 //				fakeSMSUpdate();
-				startHover(currentActivity, actionId);
+				startHover(currentActivity, actionId, extras, environment);
 			} catch (Exception e) {
 				sessionPromise.reject(e);
 				sessionPromise = null;
@@ -120,13 +128,19 @@ public class RNHoverReactSdkModule extends ReactContextBaseJavaModule {
 //		LocalBroadcastManager.getInstance(reactContext).sendBroadcast(i);
 	}
 
-	private void startHover(Activity currentActivity, String actionId) {
+	private void startHover(Activity currentActivity, String actionId, ReadableMap map, int env) {
 		Log.e(TAG, "starting Hover");
-		Intent i = new HoverParameters.Builder(currentActivity)
-			.request(actionId)
-			// .extra(“action_step_variable_name”, variable_value)
-			.buildIntent();
-		currentActivity.startActivityForResult(i, SESSION_REQUEST);
+		HoverParameters.Builder hpb = new HoverParameters.Builder(currentActivity).request(actionId);
+		hpb.setEnvironment(env);
+		addExtras(hpb, map);
+		currentActivity.startActivityForResult(hpb.buildIntent(), SESSION_REQUEST);
+	}
+	private void addExtras(HoverParameters.Builder hpb, ReadableMap map) {
+		ReadableMapKeySetIterator iterator = map.keySetIterator();
+		while (iterator.hasNextKey()) {
+			String key = iterator.nextKey();
+			hpb.extra(key, map.getString(key));
+		}
 	}
 
 	private void onSessionResult(int resultCode, Intent i) {
@@ -134,9 +148,16 @@ public class RNHoverReactSdkModule extends ReactContextBaseJavaModule {
 		if (resultCode == Activity.RESULT_CANCELED) {
 			sessionPromise.reject("Denied");
 		} else if (resultCode == Activity.RESULT_OK) {
-			sessionPromise.resolve("Success!");
+			sessionPromise.resolve(getSessionResult(i));
 		}
 		sessionPromise = null;
+	}
+
+	private WritableNativeMap getSessionResult(Intent i) {
+		WritableNativeMap map = null;
+		if (i != null && i.getExtras() != null)
+			map = RNTransactionUpdateService.convertBundleToWritableNativeMap(i.getExtras());
+		return map;
 	}
 
 	private final ActivityEventListener activityEventListener = new BaseActivityEventListener() {

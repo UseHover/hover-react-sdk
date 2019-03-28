@@ -32,38 +32,18 @@ public class RNTransactionUpdateService extends HeadlessJsTaskService {
 			Log.e(TAG, "emitting event");
 			getReactNativeHost().getReactInstanceManager().getCurrentReactContext()
 				.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-				.emit("transaction_update", convertTinfoToWritableNativeMap(intent.getExtras()));
+				.emit("transaction_update", convertBundleToWritableNativeMap(intent.getExtras()));
 			Log.e(TAG, "done");
 		} catch (Exception e) { Log.e(TAG, e.getMessage()); }
 
 		return null;
 	}
 
-	private WritableNativeMap getDetails(Intent i) {
-		WritableNativeMap params = new WritableNativeMap();
-		params.putString("uuid", i.getStringExtra("uuid"));
-		params.putString("action_id", i.getStringExtra("action_id"));
-		params.putString("response_message", i.getStringExtra("response_message"));
-		params.putString("status", i.getStringExtra("status"));
-		params.putString("status_meaning", i.getStringExtra("status_meaning"));
-		params.putString("status_description", i.getStringExtra("status_description"));
-		params.putString("environment", i.getStringExtra("environment"));
-		params.putString("sim_hni", i.getStringExtra("sim_hni"));
-		params.putString("request_timestamp", i.getStringExtra("request_timestamp"));
-		params.putString("update_timestamp", i.getStringExtra("update_timestamp"));
-
-		params.putString("extras", i.getStringExtra("request_timestamp"));
-		params.putString("ussd_messages", i.getStringExtra("update_timestamp"));
-
-		params.putString("matched_parser_id", i.getStringExtra("matched_parser_id"));
-		params.putString("message_type", i.getStringExtra("message_type"));
-		params.putString("response_number", i.getStringExtra("response_number"));
-		params.putString("regex", i.getStringExtra("regex"));
-
-		return params;
-	}
-
-	private WritableNativeMap convertTinfoToWritableNativeMap(Bundle bundle) {
+	// These are the intent extras supplied by the Hover SDK
+	//	uuid, action_id, response_message, status, status_meaning, status_description, environment,
+	//	sim_hni, request_timestamp, update_timestamp, transaction_extras, ussd_messages,
+	//	matched_parser_id, message_type, response_number, regex
+	public static WritableNativeMap convertBundleToWritableNativeMap(Bundle bundle) {
 		WritableNativeMap params = new WritableNativeMap();
 		for (String key : bundle.keySet()) {
 			if (bundle.get(key) != null) {
@@ -81,14 +61,14 @@ public class RNTransactionUpdateService extends HeadlessJsTaskService {
 		return params;
 	}
 
-	private WritableNativeMap convertHashMapToWritableNative(HashMap<String, String> extras) {
+	public static WritableNativeMap convertHashMapToWritableNative(HashMap<String, String> extras) {
 		WritableNativeMap map = new WritableNativeMap();
 		for (Map.Entry<String, String> entry : extras.entrySet())
 			map.putString(entry.getKey(), entry.getValue());
 		return map;
 	}
 
-	private WritableNativeArray convertArrToWritableNative(String[] messages) {
+	public static WritableNativeArray convertArrToWritableNative(String[] messages) {
 		WritableNativeArray arr = new WritableNativeArray();
 		for (String msg: messages)
 			arr.pushString(msg);
