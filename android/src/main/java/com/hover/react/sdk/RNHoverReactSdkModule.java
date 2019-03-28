@@ -102,6 +102,7 @@ public class RNHoverReactSdkModule extends ReactContextBaseJavaModule {
 		if (currentActivity != null) {
 			try {
 				sessionPromise = p;
+//				fakeSMSUpdate();
 				startHover(currentActivity, actionId);
 			} catch (Exception e) {
 				sessionPromise.reject(e);
@@ -113,6 +114,8 @@ public class RNHoverReactSdkModule extends ReactContextBaseJavaModule {
 	// Just for testing
 	private void fakeSMSUpdate() {
 		Intent i = new Intent(getPackageName() + ".CONFIRMED_TRANSACTION");
+		i.putExtra("uuid", "SAMPLE");
+		i.putExtra("response_message", "Messages");
 		reactContext.sendBroadcast(i);
 //		LocalBroadcastManager.getInstance(reactContext).sendBroadcast(i);
 	}

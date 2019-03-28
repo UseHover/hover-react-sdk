@@ -9,7 +9,7 @@
 		<receiver
 			android:name=".RNHoverTransactionReceiver"
 			android:enabled="true"
-			android:exported="true">
+			android:exported="false">
 			<intent-filter>
 				<action android:name="com.hover.react.tester.CONFIRMED_TRANSACTION"/>
 			</intent-filter>
