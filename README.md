@@ -3,6 +3,8 @@
 
 This SDK is in alpha, and currently supports only the most basic Hover functionality: Getting the required permissions, starting a USSD session, getting the results of the session, parsing the result and passing the parsed result of any USSD or SMS response back. After initial set-up all coding can be done in javascript, however the setup does require your react project to include android native source, which means you need to use the react native cli, not expo.
 
+Please see our [docs](https://www.usehover.com/docs) for getting started with Hover. See our [sample app](https://github.com/UseHover/HoverTesterReact) for an example of how to use this SDK. 
+
 For bug reports or feature requests you can submit an issue to this repo or contact us at support@usehover.com
 
 ## Installation
