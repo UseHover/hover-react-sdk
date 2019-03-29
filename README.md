@@ -10,10 +10,15 @@ For bug reports or feature requests you can submit an issue to this repo or cont
 We will eventually add this to npm, but for now just clone this repo.
 
 Inside this project directory run
-`$ npm install --save-dev`
+  ```
+  $ npm install --save-dev
+  ```
 
 Inside your react native project directory:
-1. Run `$ npm install PATH_TO/react-native-hover-react-sdk --save-dev`
+1. Run 
+  ```
+  $ npm install PATH_TO/react-native-hover-react-sdk --save-dev
+  ```
 
 2. Open your project's `package.json` and add `"react-native-hover-react-sdk": "file:PATH_TO/react-native-hover-react-sdk"` to the dependencies section.
   
@@ -23,15 +28,21 @@ Inside your react native project directory:
   	project(':react-native-hover-react-sdk').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-hover-react-sdk/android')
   	```
     
-4. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-  	```
-      implementation project(':react-native-hover-react-sdk')
-  	```
-5. Open `android/app/src/main/java/[...]/MainApplication.java`
+4. Insert the following lines inside the allprojects > repositories block in `android/app/build.gradle`:
+  ```
+  maven { url 'http://maven.usehover.com/releases' }
+  ```
+    
+5. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+  ```
+  implementation project(':react-native-hover-react-sdk')
+  ```
+  
+6. Open `android/app/src/main/java/[...]/MainApplication.java`
   - Add `import com.hover.react.sdk.RNHoverReactSdkPackage;` to the imports at the top of the file
   - Add `new RNHoverReactSdkPackage()` to the list returned by the `getPackages()` method
   
-6. Open `android/app/src/main/java/[...]/MainActivity.java`
+7. Open `android/app/src/main/java/[...]/MainActivity.java`
   - Add `import com.hover.react.sdk.RNHoverReactSdkModule;` to the imports at the top of the file
   - Add `RNHoverReactSdkModule.initializeHover(this.getApplicationContext());` at the end of the onCreate method
 
