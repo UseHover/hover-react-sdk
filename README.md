@@ -23,18 +23,18 @@ Inside your react native project directory:
   ```
   
 2. Append the following lines to `android/settings.gradle`:
-  	```
+  	```gradle
   	include ':react-native-hover-react-sdk'
   	project(':react-native-hover-react-sdk').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-hover-react-sdk/android')
   	```
     
 3. Insert the following lines inside the allprojects > repositories block in `android/build.gradle`:
-  ```
+  ```gradle
   maven { url 'http://maven.usehover.com/releases' }
   ```
     
 4. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-  ```
+  ```gradle
   implementation project(':react-native-hover-react-sdk')
   ```
   
@@ -45,12 +45,12 @@ Inside your react native project directory:
 6. Open `android/app/src/main/java/[...]/MainActivity.java`
   - Add `import com.hover.react.sdk.RNHoverReactSdkModule;` to the imports at the top of the file
   - If there is an onCreate method, append `RNHoverReactSdkModule.initializeHover(this.getApplicationContext());` otherwise add it:
-  ```
-  @Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		RNHoverReactSdkModule.initializeHover(this.getApplicationContext());
-	}
+  ```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	RNHoverReactSdkModule.initializeHover(this.getApplicationContext());
+}
   ```
 
 
@@ -65,13 +65,13 @@ const RNHoverReactSdk = NativeModules.RNHoverReactSdk;
 Inside your component:
 
 To check if the Hover required permissions have been granted (READ_PHONE_STATE, RECEIVE_SMS, SYSTEM_ALERT_WINDOW, and BIND_ACCESSIBILITY_SERVICE:
-```
+```javascript
 var areGranted = await RNHoverReactSdk.hasAllPermissions();
 console.log("granted: " + areGranted);
 ```
 
 To start the Hover permission request helper:
-```
+```javascript
   try {
     var areGranted = await RNHoverReactSdk.getPermission();
   } catch (e) {
@@ -81,7 +81,7 @@ To start the Hover permission request helper:
 ```
 
 To start a Hover request:
-```
+```javascript
   try {
     extras = {"amount": "100", "recipient": "43214324"}; // Whatever variables you specified when creating your action
     var response = await RNHoverReactSdk.makeRequest(ACTION_ID, extras);
@@ -94,7 +94,7 @@ To start a Hover request:
 The properties present on the returned data object are those found [here](https://www.usehover.com/docs/ussd#parsing)
 
 If you have created a parser in your Hover dashboard then you need add your event listener BEFORE starting the Hover request. The best place for this is in your component's `componentWillMount` function:
-```
+```javascript
 async onHoverParserMatch(data) {
   console.log("received update for transaction with uuid: " + data.uuid);
 }
