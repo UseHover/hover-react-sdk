@@ -33,6 +33,6 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.hover:android-sdk:1.2.1'
+    implementation 'com.hover:android-sdk:1.3.1'
 }
   
