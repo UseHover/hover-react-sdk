@@ -38,11 +38,21 @@ Inside your react native project directory:
   implementation project(':react-native-hover-react-sdk')
   ```
   
-5. Open `android/app/src/main/java/[...]/MainApplication.java`
+5. Add your Hover API key to the AndroidManifest inside the application tag:
+  ```xml
+<application>
+	...
+	<meta-data
+		android:name="com.hover.ApiKey"  
+		android:value="<YOUR_API_TOKEN>"/>
+</application>
+```
+  
+6. Open `android/app/src/main/java/[...]/MainApplication.java`
   - Add `import com.hover.react.sdk.RNHoverReactSdkPackage;` to the imports at the top of the file
   - Add `new RNHoverReactSdkPackage()` to the list returned by the `getPackages()` method
   
-6. Open `android/app/src/main/java/[...]/MainActivity.java`
+7. Open `android/app/src/main/java/[...]/MainActivity.java`
   - Add `import com.hover.react.sdk.RNHoverReactSdkModule;` to the imports at the top of the file
   - If there is an onCreate method, append `RNHoverReactSdkModule.initializeHover(this.getApplicationContext());` otherwise add it:
   ```java
