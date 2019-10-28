@@ -38,7 +38,7 @@ Inside your react native project directory:
   implementation project(':react-native-hover-react-sdk')
   ```
   
-5. Add your Hover API key to the AndroidManifest inside the application tag:
+5. Add your Hover API key to the AndroidManifest (`android/app/src/main/AndroidManifest.xml`) inside the application tag. To generate the key, sign in to usehover.com and generate a new app with your package name.
   ```xml
 <application>
 	...
